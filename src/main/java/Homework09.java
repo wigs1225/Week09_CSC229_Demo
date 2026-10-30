@@ -29,6 +29,71 @@ We can see that 28 is the first triangle number to have over five divisors.
 What is the value of the first triangle number to have over one hundred divisors?
     
     */
-    
+    /**
+     * Calculates the nth triangle number.
+     * @param n the position of the triangle number to calculate
+     * @return the nth triangle number
+     */
+    public static int triangleNumber(int n) {
+
+        //Base case for n being less than or equal to 0.
+        if (n <= 0) {
+            return 0;
+        }
+        //Base case for n being equal to 1.
+        if (n == 1) {
+            return 1;
+        }
+        //Recurse each time by adding n to the triangle number of n-1.
+        return n + triangleNumber(n - 1);
+    }
+
+    /**
+     * Counts the number of divisors of a given number.
+     * @param number the number to count divisors for
+     * @return the number of divisors
+     */
+    public static int countDivisors(int number) {
+        int count = 0;
+
+        //I initially had looped from 1 to the number, but after some research, I found that looping to the square works because the divisors come in pairs, with the smaller one <= sqrt(number)
+        //This changes the time complexity from O(n) to O(n^1/2)
+        for (int i = 1; i <= Math.sqrt(number); i++) {
+            if (number % i == 0) {
+                count += 2;
+
+                //If the number is a perfect square, this stops it from counting the root twice.
+                if (i == number / i) {
+                    count--;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * The main method to find the first triangle number with over one hundred divisors.
+     * @param args command-line arguments (not used)
+     */
+    public static void main(String[] args) {
+        int n = 1;
+        boolean found = false;
+
+        while (!found) {
+            //Calculate nth triangle number.
+            int triangle = triangleNumber(n);
+
+            //If the number of divisors is greater than 100, print the number.
+            if (countDivisors(triangle) > 100) {
+                System.out.println("The first triangle number with over one hundred divisors is: " + triangle);
+                found = true;
+            }
+
+            n++;
+        }
+    }
+
+    //The program prints the first triangle number with over one hundred divisors, which is 73920.
     
 }
